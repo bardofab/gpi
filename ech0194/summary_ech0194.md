@@ -43,8 +43,18 @@ Vereinfachungen gemäss Björn:
 
 ### Prozess beim Wegzug / Zuzug via Umzugsplattform
 
-![Umzug](umzug.png)
+![Umzug](wegzug_zuzug.png)
 
 Die Person meldet sich bei der Umzugsplattform an und erfasst die notwendigen Daten für den Umzug innerhalb der Gemeinde (move message).
 
 * **ZWINGEND** Die Umzugsplattform macht eine Umzugsanfrage bei der Umzugsgemeinde (eCH-0194:personMoveRequest). Die Umzugsgemeinde beantwortet diese mittels Umzugs-antwort (eCH-0194:personMoveResponse).
+* **ZWINGEND** Die Umzugsplattform meldet der Wegzugsgemeinde die Angaben zur Person sowie die von der Person erfassten Zusatzdaten (eCH-0194:platformMoveOut). Siehe Kapi-tel 3.2.2.
+* **ZWINGEND** Die Einwohnerdienste bestätigen der Umzugsplattform, dass der Wegzug der Zuzugsgemeinde gemeldet worden ist (eCH-0058:business receipt).
+* **ZWINGEND** Die Umzugsplattform bestätigt der meldepflichtigen Person den Wegzug (mo-ve out confirmation)
+* **ZWINGEND** Die Umzugsplattform meldet der Zuzugsgemeinde die Angaben zur Person sowie die von der Person erfassten Zusatzdaten (eCH-0194:platformMoveIn). Siehe Kapitel 3.2.3. Die Umzugsplattform signalisiert der Zuzugsgemeinde (eCH-0058:header:businessCaseClosed = true) dass keine weiteren Meldungen mehr von der Umzugsplattform folgen und der Zuzug aus Sicht der Umzugsplattform abgeschlossen ist (alles gemeldet und - sofern relevant - bezahlt).
+* **ZWINGEND** Die Einwohnerdienste der Zuzugsgemeinde bestätigen der Umzugsplattform den erfolgten Zuzug (eCH-0058: business receipt).
+* **ZWINGEND** Die Umzugsplattform bestätigt der Person den erfolgten Zuzug. Per Mail (Anmerkung von Björn)
+
+### Prozess beim Umzug via Umzugsplattform
+
+![Umzug](umzug.png)
