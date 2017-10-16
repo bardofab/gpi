@@ -1,5 +1,9 @@
 # eCH-0194 Schnittstellenstandard eUmzug
 
+```
+- TODO: Add capitel reference
+```
+
 ## Einleitung
 * Personenidentifikation erfolgt synchron
 * Wir implementieren keine Anbindung an Sedex.
@@ -39,11 +43,11 @@ Vereinfachungen gemäss Björn:
 
 ### Umzugsanfrage
 
-![Umzugsanfrage](umzugsanfrage.png)
+![Umzugsanfrage](images/umzugsanfrage.png)
 
 ### Prozess beim Wegzug / Zuzug via Umzugsplattform
 
-![Umzug](wegzug_zuzug.png)
+![Umzug](images/wegzug_zuzug.png)
 
 Die Person meldet sich bei der Umzugsplattform an und erfasst die notwendigen Daten für den Umzug innerhalb der Gemeinde (move message).
 
@@ -57,4 +61,52 @@ Die Person meldet sich bei der Umzugsplattform an und erfasst die notwendigen Da
 
 ### Prozess beim Umzug via Umzugsplattform
 
-![Umzug](umzug.png)
+![Umzug](images/umzug.png)
+
+* **ZWINGEND** Die Umzugsplattform macht eine Umzugsanfrage bei der Umzugsgemeinde (eCH-0194:personMoveRequest). Die Umzugsgemeinde beantwortet diese mittels Umzugs-antwort (eCH-0194:personMoveResponse).
+* **ZWINGEND** Die Umzugsplattform meldet der Umzugsgemeinde die Angaben zur Person sowie die von der Person erfassten Zusatzdaten (eCH-0194:platformMoveData). Siehe Kapi-tel 3.2.4 Die Umzugsplattform signalisiert der Umzugsgemeinde (eCH-0058:header:businessCaseClosed = true) dass keine weiteren Meldungen mehr von der Umzugsplattform folgen und der Umzug aus Sicht der Umzugsplattform abgeschlossen ist (alles gemeldet und - sofern relevant - bezahlt).
+* **ZWINGEND** Die Umzugsgemeinde bestätigt der Umzugsplattform den Umzug (eCH-0058 business receipt).
+* **ZWINGEND** Die Umzugsplattform bestätigt der Person den erfolgten Umzug (move confirmation). Per Mail (Anmerkung von Björn)
+
+### Prozess beim Zuzug via Umzugsplattform
+
+![Zuzug](images/zuzug.png)
+
+* **ZWINGEND** Die Umzugsplattform macht eine Umzugsanfrage bei der Wegzugsgemeinde (eCH-0194:personMoveRequest). Die Wegzugsgemeinde beantwortet diese mittels Um-zugsantwort (eCH-0194:personMoveResponse).
+* **ZWINGEND** Die Umzugsplattform meldet der Wegzugsgemeinde die Angaben zur Person sowie die von der Person erfassten Zusatzdaten (eCH-0194:platformMoveOut). Siehe Kapi-tel 3.2.2.
+* **ZWINGEND** Die Einwohnerdienste der Wegzugsgemeinde melden der Zuzugsgemeinde den Wegzug (eCH-0093:moveOut). Siehe eCH-0093.
+* **ZWINGEND** Die Einwohnerdienste der Wegzugsgemeinde bestätigen der Umzugsplatt-form, dass der Wegzug der Zuzugsgemeinde gemeldet worden ist (eCH-0058 business re-ceipt). Die Umzugsplattform der Wegzugsgemeinde bestätigt der Person den erfolgten Wegzug (move out confirmation).
+* **ZWINGEND** Die Umzugsplattform meldet der Zuzugsgemeinde die Angaben zur Person sowie die von der Person erfassten Zusatzdaten (eCH-0194:platformMoveIn). Siehe Kapitel 3.2.3
+* **EMPFOHLEN** Die Zuzugsgemeinde fordert den Meldepflichtigen zur Bestätigung des Zu-zugs auf (request move in message).
+* **EMPFOHLEN** Der Meldepflichtige prüft die Daten auf der Umzugsplattform, wählt Dienste aus und schliesst den Zuzug ab (move in message).
+* **ZWINGEND** Die Umzugsplattform macht eine Umzugsanfrage bei der Zuzugsgemeinde (eCH-0194:personMoveRequest). Die Zuzugsgemeinde beantwortet diese mittels Umzugs-antwort (eCH-0194:personMoveResponse).
+* **ZWINGEND** Die Umzugsplattform bestätigt der Zuzugsgemeinde den Abschluss des Zu-zugs (eCH-0194:platformMoveComit). Siehe Kapitel 3.2.6 Die Umzugsplattform signalisiert der Zuzugsgemeinde (eCH-0058:header:businessCaseClosed = true) dass keine weiteren Meldungen mehr von der Umzugsplattform folgen und der Zuzug aus Sicht der Umzugsplattform abgeschlossen ist (alles gemeldet und - sofern relevant - bezahlt).
+* **ZWINGEND** Die Einwohnerdienste der Zuzugsgemeinde melden der Wegzugsgemeinde den Zuzug (eCH-0093:moveIn). Siehe eCH-0093.
+* **ZWINGEND** Die Einwohnerdienste der Zuzugsgemeinde quittieren den beteiligten Um-zugsplattformen den Abschluss (eCH-0058: business receipt)
+Die Umzugsplattform der Zuzugsgemeinde bestätigt der Person den erfolgten Zuzug (move in confirmation).
+* **EMPFOHLEN** Die Umzugsplattform der Zuzugsgemeinde meldet die Zuzugsadresse an berechtigte Verwaltungsstellen (Bsp. VeKa). Siehe Kapitel 3.2.5
+
+## 3.2 Ereignismeldungen
+
+### 3.2.1 Umzugsanfrage/Umzugsantwort
+
+#### 3.2.1.1 Umzugsanfrage - personMoveRequest (synchron)
+
+**Ereignisbeschreibung**
+Die Umzugsplattform fragt bei den Einwohnerdiensten an ob die Person bekannt ist, ob sie umziehen darf und ob es sich um einen Umzug, Wegzug oder um einen Zuzug handelt.
+
+**Ereignisdaten**
+Folgende Informationen zur Person sind zu übermitteln:
+* Personenidentifikatoren (zwingend) – personIdentification, siehe eCH-0044
+* Gemeinde (zwingend) – municipality, siehe eCH-0007
+* Erweiterung (optional) – extension, siehe Kapitel 3.2.6.9
+
+![PersonMoveRequest](images/PersonMoveRequest.png)
+
+#### 3.2.1.2 Umzugsantwort - personMoveResponse
+
+**Ereignisbeschreibung**
+Die Einwohnerdienste beantworten die Anfrage der Umzugsplattform mit folgenden Informationen:
+
+* 1 = Wegzug / Umzug erlaubt
+* 2 = Wegzug / Umzug nicht erlaubt
